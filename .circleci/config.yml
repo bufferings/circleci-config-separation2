@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Generate config list
           command: |
-            find . -type f -regex '.*/.circleci/config.yml' \
+            find . -type f -regex '.*/\.circleci/config\.yml' -not -regex '\./\.circleci/config\.yml' \
             | tee .circleci/config-list.txt
       - run:
           name: Generate config
