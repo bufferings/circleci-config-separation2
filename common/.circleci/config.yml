@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  common/say-hello:
+  common-say-hello:
     docker:
       - image: cimg/base:stable
     steps:
