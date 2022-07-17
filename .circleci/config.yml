@@ -1,0 +1,27 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  continuation: circleci/continuation@0.3.1
+
+jobs:
+  build:
+    docker:
+      - image: bufferings/cimg-cue
+    steps:
+      - checkout
+      - run:
+          name: Generate config list
+          command: |
+            find . -type f -regex '.*/.circleci/config.yml' \
+            | tee .circleci/config-list.txt
+      - run:
+          name: Generate config
+          command: |
+            cat .circleci/config-list.txt \
+            | awk '{printf "\"%s\" ", $0}' \
+            | xargs -0 -I {} sh -c 'cue export {} --out yaml' \
+            | tee .circleci/generated_config.yml
+      - continuation/continue:
+          configuration_path: .circleci/generated_config.yml
